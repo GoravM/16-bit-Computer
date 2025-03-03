@@ -1,0 +1,111 @@
+// File name: projects/5/CPU.hdl
+/**
+ * The Hack Central Processing unit (CPU).
+ * Parses the binary code in the instruction input and executes it according to the
+ * Hack machine language specification. In the case of a C-instruction, computes the
+ * function specified by the instruction. If the instruction specifies to read a memory
+ * value, the inM input is expected to contain this value. If the instruction specifies
+ * to write a value to the memory, sets the outM output to this value, sets the addressM
+ * output to the target address, and asserts the writeM output (when writeM = 0, any
+ * value may appear in outM).
+ * If the reset input is 0, computes the address of the next instruction and sets the
+ * pc output to that value. If the reset input is 1, sets pc to 0.
+ * Note: The outM and writeM outputs are combinational: they are affected by the
+ * instruction's execution during the current cycle. The addressM and pc outputs are
+ * clocked: although they are affected by the instruction's execution, they commit to
+ * their new values only in the next cycle.
+ */
+CHIP CPU {
+
+    IN  inM[16],         // M value input  (M = contents of RAM[A])
+        instruction[16], // Instruction for execution
+        reset;           // Signals whether to re-start the current
+                         // program (reset==1) or continue executing
+                         // the current program (reset==0).
+
+    OUT outM[16],        // M value output
+        writeM,          // Write to M? 
+        addressM[15],    // Address in data memory (of M)
+        pc[15];          // address of next instruction
+
+    PARTS:
+	//// Replace this comment with your code.
+    Not(in=instruction[15] , out=Ainstruction );    // 0 -> 1 for Ainstruction
+
+    // instruction mux
+    // if opcode is 1 (c-instr) and d1 is 1 then use ALUout else instruction
+    And(a=instruction[15] , b=instruction[5] , out=instmux );
+    Mux16(a=instruction , b=ALUout , sel=instmux , out=mux1out );
+    
+    // regA
+    // store instruction or ALUout in regA
+    // load is determined from instruction bit d1 [5]
+    Or(a=Ainstruction , b=instruction[5] , out=aload ); // ibbi did instmux not instr5
+
+    ARegister(in=mux1out , load=aload , out=areg , out[0..14]=addressM );
+
+    // regD
+    // stores ALU output if d2 [4] is 1 ONLY if its a c-instruction
+    And(a=instruction[4] , b=instruction[15] , out=dload );
+    DRegister(in=ALUout , load=dload , out=dreg );
+
+    // memory mux: Aregister or Mregister to Mux16 for ALU
+    // determined by bit a [12] if 1 then use inM else regA
+    Mux16(a=areg , b=inM , sel=instruction[12] , out=aregmreg );
+
+    // ALU
+    ALU(x=dreg , y=aregmreg , 
+        zx=instruction[11] , nx=instruction[10] , 
+        zy=instruction[9] , ny=instruction[8] , 
+        f=instruction[7] , no=instruction[6] , 
+        out=ALUout , out=outM , zr=zr , ng=ng );
+    
+    // write to memory
+    And(a=instruction[3] , b=instruction[15] , out=writeM );
+
+    // Control Logic of CPU
+    And(a=true , b=instruction[2] , out=j1 );
+    And(a=true , b=instruction[1] , out=j2 );
+    And(a=true , b=instruction[0] , out=j3 );
+
+    Not(in=j1 , out=nj1 );
+    Not(in=j2 , out=nj2 );
+    Not(in=j3 , out=nj3 );
+    Not(in=zr , out=nzr );
+    Not(in=ng , out=nng );
+
+    // use 3 jump-bits, zr && ng
+    // no jump PC++
+    // goto PC = A
+    // conditional goto if condition is true PC=A else PC++
+
+    // JGT, J3 = 1 & zr = 0 & ng = 0
+    And(a=nzr , b=nng , out=nzrnng );
+    And(a=j3 , b=nzrnng , out=outjgt );
+
+    // JEQ, J2 = 1 & zr = 1
+    And(a=j2 , b=zr , out=outjeq );
+
+    // JLT, J1 = 1 & ng = 1
+    And(a=j1 , b=ng , out=outjlt );
+
+    // JLE, J1 & J2 & (zr || ng)
+    Or(a=zr , b=ng , out=zrng );
+    And(a=j1 , b=j2 , out=j12 );
+    And(a=j12 , b=zrng , out=outjle );
+
+    // JMP, J1 & J2 & J3
+    And(a=j12 , b=j3 , out=j123 );
+
+    // combine jumps
+    Or(a=outjgt , b=outjeq , out=out1 );
+    Or(a=outjlt , b=outjle , out=out2 );
+    Or(a=out1 , b=out2 , out=out3 );
+    Or(a=j123 , b=out3 , out=jmp );
+
+    // if jmp and C-instruction then load the PC
+    And(a=instruction[15] , b=jmp , out=load );
+
+    // PC
+    PC(in=areg , load=load , inc=true , reset=reset , out[0..14]=pc );
+}
