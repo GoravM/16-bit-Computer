@@ -1,0 +1,41 @@
+// File name: projects/2/FullAdder.hdl
+/**
+ * Computes the sum of three bits.
+ */
+CHIP FullAdder {
+    IN a, b, c;  // 1-bit inputs
+    OUT sum,     // Right bit of a + b + c
+        carry;   // Left bit of a + b + c
+
+    PARTS:
+    //// Replace this comment with your code.
+    // sum
+    //Not(in=a , out=na );
+    //Not(in=b , out=nb );
+    //Not(in=c , out=nc );
+
+    //abc
+    //And(a=ab , b=c , out=abc ); 
+    //a-b-c
+    //And(a=a , b=nb , out=annb );
+    //And(a=annb , b=nc , out=anbnc );
+    //-a-bc
+    //And(a=na , b=nb , out=nanb );
+    //And(a=nanb , b=c , out=nanbc );
+    //-ab-c
+    //And(a=na , b=b , out=nab );
+    //And(a=nab , b=nc , out=nabnc );
+
+    //Or(a=abc , b=anbnc , out=sum1 );
+    //Or(a=sum1 , b=nanbc , out=sum2 );
+    //Or(a=sum2 , b=nabnc , out=sum );
+
+    // sum
+    Xor(a =a , b =b , out =axb );
+    Xor(a =axb , b =c , out =sum, out=sum1 );
+
+    // carry
+    And(a=a , b=b , out=ab );
+    And(a=axb , b=c , out=axbc );
+    Or(a=axbc , b=ab , out=carry );
+}

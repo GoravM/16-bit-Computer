@@ -1,0 +1,83 @@
+// File name: projects/2/ALU.hdl
+/*
+ * ALU (Arithmetic Logic Unit):
+ * Computes out = one of the following functions:
+ *                0, 1, -1,
+ *                x, y, !x, !y, -x, -y,
+ *                x + 1, y + 1, x - 1, y - 1,
+ *                x + y, x - y, y - x,
+ *                x & y, x | y
+ * on the 16-bit inputs x, y,
+ * according to the input bits zx, nx, zy, ny, f, no.
+ * In addition, computes the two output bits:
+ * if (out == 0) zr = 1, else zr = 0
+ * if (out < 0)  ng = 1, else ng = 0
+ */
+// Implementation: Manipulates the x and y inputs
+// and operates on the resulting values, as follows:
+// if (zx == 1) sets x = 0        // 16-bit constant
+// if (nx == 1) sets x = !x       // bitwise not
+// if (zy == 1) sets y = 0        // 16-bit constant
+// if (ny == 1) sets y = !y       // bitwise not
+// if (f == 1)  sets out = x + y  // integer 2's complement addition
+// if (f == 0)  sets out = x & y  // bitwise and
+// if (no == 1) sets out = !out   // bitwise not
+
+CHIP ALU {
+    IN  
+        x[16], y[16],  // 16-bit inputs        
+        zx, // zero the x input?
+        nx, // negate the x input?
+        zy, // zero the y input?
+        ny, // negate the y input?
+        f,  // compute (out = x + y) or (out = x & y)?
+        no; // negate the out output?
+    OUT 
+        out[16], // 16-bit output
+        zr,      // if (out == 0) equals 1, else 0
+        ng;      // if (out < 0)  equals 1, else 0
+
+    PARTS:
+    //// Replace this comment with your code.
+    
+    // pre set x
+        // zx
+        Mux16(a=x , b=false , sel=zx , out=varzx );
+        
+        // nx
+        Not16(in=x , out=not16x );
+        Not16(in=varzx , out=not16varzx );
+
+        // 4waymux
+        Mux4Way16(a=x , b=not16x , c=varzx , d=not16varzx , sel[1]=zx , sel[0]=nx , out=presetx );
+
+    // pre set y
+        // zy
+        Mux16(a=y , b=false , sel=zy , out=varzy );
+        
+        // ny
+        Not16(in=y , out=not16y );
+        Not16(in=varzy , out=not16varzy );
+
+        // 4waymux
+        Mux4Way16(a=y , b=not16y , c=varzy , d=not16varzy , sel[1]=zy , sel[0]=ny , out=presety );
+    
+    // computing f
+        And16(a=presetx , b=presety , out=fout2 );
+        Add16(a =presetx , b =presety , out =fout1 );
+        Mux16(a=fout2 , b=fout1 , sel=f , out=final );
+
+    // post set no
+        Not16(in=final , out=finalno );
+        Mux16(a=final , b=finalno , sel=no , out=out, out[0..7]=lowerout, out[8..15]=upperout );
+    
+    // zr
+        Or8Way(in=lowerout , out=zr1 );
+        Or8Way(in=upperout , out=zr2 );
+        Or(a =zr1 , b =zr2 , out =zr3 );
+        Not(in=zr3 , out=zr );
+
+    // ng
+        Mux16(a[0..15]=final , b[0..15]=finalno , sel=no , out[15]=ng );
+
+}
