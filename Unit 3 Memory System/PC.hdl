@@ -1,0 +1,27 @@
+// File name: projects/3/a/PC.hdl
+/**
+ * A 16-bit counter.
+ * if      reset(t): out(t+1) = 0
+ * else if load(t):  out(t+1) = in(t)
+ * else if inc(t):   out(t+1) = out(t) + 1
+ * else              out(t+1) = out(t)
+ */
+CHIP PC {
+    IN in[16], reset, load, inc;
+    OUT out[16];
+    
+    PARTS:
+    //// Replace this comment with your code.
+
+    // increment out(t) = out(t-1) + 1
+    Inc16(in=pastout , out=incout );
+
+    // chose what to do with priority
+    Mux8Way16(a=pastout , b=incout , c=in , d=in , e=false , f=false , g=false , h=false , sel[0]=inc , sel[1]=load , sel[2]=reset , out=out4 );
+
+    // update register
+    Or8Way(in[0]=reset , in[1]=load , in[2]=inc , in[3..7]=false , out=update );
+    
+    //register to hold 
+    Register(in=out4 , load=update , out=out , out=pastout );
+}
