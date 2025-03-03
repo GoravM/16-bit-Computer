@@ -1,0 +1,32 @@
+// File name: projects/1/DMux8Way.hdl
+/**
+ * 8-way demultiplexor:
+ * [a, b, c, d, e, f, g, h] = [in, 0,  0,  0,  0,  0,  0,  0] if sel = 000
+ *                            [0, in,  0,  0,  0,  0,  0,  0] if sel = 001
+ *                            [0,  0, in,  0,  0,  0,  0,  0] if sel = 010
+ *                            [0,  0,  0, in,  0,  0,  0,  0] if sel = 011
+ *                            [0,  0,  0,  0, in,  0,  0,  0] if sel = 100
+ *                            [0,  0,  0,  0,  0, in,  0,  0] if sel = 101
+ *                            [0,  0,  0,  0,  0,  0, in,  0] if sel = 110
+ *                            [0,  0,  0,  0,  0,  0,  0, in] if sel = 111
+ */
+CHIP DMux8Way {
+    IN in, sel[3];
+    OUT a, b, c, d, e, f, g, h;
+
+    PARTS:
+    //// Replace this comment with your code.
+    DMux(in=in , sel=sel[2] , a=outlow , b=outhigh );
+    
+    DMux(in=outlow , sel=sel[1] , a=outab , b=outcd );
+    DMux(in=outab , sel=sel[0] , a=a , b=b );
+    DMux(in=outcd , sel=sel[0] , a=c , b=d );
+
+    DMux(in=outhigh , sel=sel[1] , a=outef , b=outgh );
+    DMux(in=outef , sel=sel[0] , a=e , b=f );
+    DMux(in=outgh , sel=sel[0] , a=g , b=h );
+
+    //DMux(in=in , sel=sel[2] , a=midlow , b=midhigh );
+    //DMux4Way(in=midlow , sel=sel[0..1] , a=a , b=b , c=c , d=d );
+    //DMux4Way(in=midhigh , sel=sel[0..1] , a=e , b=f , c=g , d=h );
+}
