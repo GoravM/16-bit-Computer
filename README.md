@@ -36,3 +36,22 @@ The 16-bit computer integrates the CPU, Memory, and ROM to create a system capab
 <p align="center"><img src="https://github.com/GoravM/16-bit-Computer/blob/main/16-bit-Computer/Computer%20Circuit.png" width="50%"></p> 
 <p align="center">Computer Circuit Diagram</p>
 
+#### C-Instruction
+---
+The C-Instruction is one of the two types of instructions in the Hack assembly language, used for performing computations, storing results, and controlling program flow. The opcode for a C-Instruction is always 1. It follows the syntax: dest = comp ; jump
+
+Where:
+- comp specifies the computation to be performed by the ALU.
+- dest determines where the computed result is stored (e.g., A register, D register, RAM).
+- jump defines the conditions under which the program counter (PC) should jump to a different instruction.
+
+
+<p align="center"><img src="https://github.com/GoravM/16-bit-Computer/blob/main/16-bit-Computer/C%20Instruction.jpg" width="50%"></p> 
+<p align="center">C-Instruction</p>
+
+#### A-Instruction
+---
+The A-Instruction is the second type of instruction in the Hack assembly language, which is used for performing computations, storing results, and controlling program flow. it follows the syntax: @value
+
+Where value is a 15-bit constant or a label referring to a memory address. The opcode is always 0, distinguishing it from a C-Instruction.
+
