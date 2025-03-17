@@ -1,4 +1,4 @@
-// File name: projects/3/b/RAM4K.hdl
+// File name: RAM4K.hdl
 /**
  * Memory of 4K 16-bit registers.
  * If load is asserted, the value of the register selected by

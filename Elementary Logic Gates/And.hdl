@@ -1,4 +1,4 @@
-// File name: projects/1/And.hdl
+// File name: And.hdl
 /**
  * And gate:
  * if (a and b) out = 1, else out = 0 

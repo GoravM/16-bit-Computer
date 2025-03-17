@@ -1,4 +1,4 @@
-// File name: projects/3/a/Bit.hdl
+// File name: Bit.hdl
 /**
  * 1-bit register:
  * If load is asserted, the register's value is set to in;

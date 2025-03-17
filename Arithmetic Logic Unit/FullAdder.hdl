@@ -1,4 +1,4 @@
-// File name: projects/2/FullAdder.hdl
+// File name: FullAdder.hdl
 /**
  * Computes the sum of three bits.
  */

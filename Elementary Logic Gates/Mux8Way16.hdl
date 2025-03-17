@@ -1,4 +1,4 @@
-// File name: projects/1/Mux8Way16.hdl
+// File name: Mux8Way16.hdl
 /**
  * 8-way 16-bit multiplexor:
  * out = a if sel = 000

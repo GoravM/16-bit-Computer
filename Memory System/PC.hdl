@@ -1,4 +1,4 @@
-// File name: projects/3/a/PC.hdl
+// File name: PC.hdl
 /**
  * A 16-bit counter.
  * if      reset(t): out(t+1) = 0

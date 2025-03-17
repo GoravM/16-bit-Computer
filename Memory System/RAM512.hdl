@@ -1,4 +1,4 @@
-// File name: projects/3/b/RAM512.hdl
+// File name: RAM512.hdl
 /**
  * Memory of 512 16-bit registers.
  * If load is asserted, the value of the register selected by

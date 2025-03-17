@@ -1,4 +1,4 @@
-// File name: projects/1/DMux.hdl
+// File name: DMux.hdl
 /**
  * Demultiplexor:
  * [a, b] = [in, 0] if sel = 0

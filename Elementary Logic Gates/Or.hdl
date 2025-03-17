@@ -1,4 +1,4 @@
-// File name: projects/1/Or.hdl
+// File name: Or.hdl
 /**
  * Or gate:
  * if (a or b) out = 1, else out = 0 

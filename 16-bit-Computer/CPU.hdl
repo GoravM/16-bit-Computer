@@ -1,4 +1,4 @@
-// File name: projects/5/CPU.hdl
+// File name: CPU.hdl
 /**
  * The Hack Central Processing unit (CPU).
  * Parses the binary code in the instruction input and executes it according to the

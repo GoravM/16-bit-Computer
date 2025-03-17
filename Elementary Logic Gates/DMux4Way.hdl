@@ -1,4 +1,4 @@
-// File name: projects/1/DMux4Way.hdl
+// File name: DMux4Way.hdl
 /**
  * 4-way demultiplexor:
  * [a, b, c, d] = [in, 0, 0, 0] if sel = 00

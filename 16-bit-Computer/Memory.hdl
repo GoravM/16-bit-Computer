@@ -1,4 +1,4 @@
-// File name: projects/5/Memory.hdl
+// File name: Memory.hdl
 /**
  * The complete address space of the Hack computer's memory,
  * including RAM and memory-mapped I/O. 

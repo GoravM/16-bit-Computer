@@ -1,4 +1,4 @@
-// File name: projects/3/b/RAM16K.hdl
+// File name: RAM16K.hdl
 /**
  * Memory of 16K 16-bit registers.
  * If load is asserted, the value of the register selected by

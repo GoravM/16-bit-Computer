@@ -1,4 +1,4 @@
-// File name: projects/2/HalfAdder.hdl
+// File name: HalfAdder.hdl
 /**
  * Computes the sum of two bits.
  */

@@ -1,4 +1,4 @@
-// File name: projects/5/Computer.hdl
+// File name: Computer.hdl
 /**
  * The Hack computer, consisting of CPU, ROM and RAM.
  * When reset = 0, the program stored in the ROM executes.

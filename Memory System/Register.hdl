@@ -1,4 +1,4 @@
-// File name: projects/3/a/Register.hdl
+// File name: Register.hdl
 /**
  * 16-bit register:
  * If load is asserted, the register's value is set to in;

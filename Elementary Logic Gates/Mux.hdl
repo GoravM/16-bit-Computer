@@ -1,4 +1,4 @@
-// File name: projects/1/Mux.hdl
+// File name: Mux.hdl
 /** 
  * Multiplexor:
  * if (sel = 0) out = a, else out = b

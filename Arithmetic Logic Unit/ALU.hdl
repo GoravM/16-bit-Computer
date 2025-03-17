@@ -1,4 +1,4 @@
-// File name: projects/2/ALU.hdl
+// File name: ALU.hdl
 /*
  * ALU (Arithmetic Logic Unit):
  * Computes out = one of the following functions:

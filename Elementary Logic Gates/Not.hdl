@@ -1,4 +1,4 @@
-// File name: projects/1/Not.hdl
+// File name: Not.hdl
 /**
  * Not gate:
  * if (in) out = 0, else out = 1

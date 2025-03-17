@@ -1,4 +1,4 @@
-// File name: projects/1/Xor.hdl
+// File name: Xor.hdl
 /**
  * Exclusive-or gate:
  * if ((a and Not(b)) or (Not(a) and b)) out = 1, else out = 0
