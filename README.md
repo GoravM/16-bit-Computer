@@ -55,3 +55,41 @@ The A-Instruction is the second type of instruction in the Hack assembly languag
 
 Where value is a 15-bit constant or a label referring to a memory address. The opcode is always 0, distinguishing it from a C-Instruction.
 
+### Assembler
+---
+The Assembler component translates Hack assembly language into binary machine code compatible with the 16-bit computer architecture. It processes files containing both A-instructions (e.g., `@value`) and C-instructions (e.g., `dest=comp;jump`) and outputs a binary file with corresponding 16-bit machine instructions.
+
+This implementation parses each line by:
+
+1. **Ignoring Comments and Whitespace**:  
+   Inline and full-line comments (starting with `//`) are sanitized before translation. To make it easier to write and test code, the assembler inserts a 16-bit `0` binary (`0000000000000000`) into the output for every comment line or empty line. This allows users to write richly documented programs without disrupting the binary instruction flow or when tracing instruction flow when line positions no longer aligns.
+
+2. **Translating A-Instructions**:  
+   A-instructions (`@value`) are converted to binary with the opcode bit as `0`, followed by a 15-bit representation of the variable `value`.
+
+3. **Translating C-Instructions**:  
+   C-instructions are parsed into their `dest`, `comp`, and `jump` components. Each component is mapped to its binary equivalent, and the full instruction is constructed with a leading `1` opcode.
+
+Example:
+
+```asm
+// This is a comment
+@1          // A-instruction: @value
+D           // C-instruction: comp
+D=M+1       // C-instruction: dest=comp
+0;JMP       // C-instruction: comp;jump
+M=D+A;JMP   // C-instruction: dest=comp;jump
+```
+
+Produces:
+
+```Binary output
+0000000000000000    // Comment line -> binary 0
+0000000000000001    // A-instruction: @1
+1000001100000000    // C-instruction: D
+1001110111010000    // C-instruction: D=M+1
+1000101010000111    // C-instruction: 0;JMP
+1000000010001111    // C-instruction: M=D+A;JMP
+```
+
+This design choice (inserting 0s for comments) ensures the program length remains consistent, aiding in debugging and step-by-step hardware simulation. While the assembler can function without inserting these 0s, omitting them can make debugging more difficult, especially due to the address-dependent nature of A-instructions and the challenge of tracing instruction flow when line positions no longer aligns.
