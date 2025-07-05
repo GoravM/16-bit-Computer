@@ -2,7 +2,7 @@
 //    arr[i] = -1
 // }
 
-// suppose arr=100 && n=10
+// suppose arr=100 && n=10.
 
 // arr=100
 @100

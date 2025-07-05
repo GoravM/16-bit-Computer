@@ -3,7 +3,7 @@
 //                R1=1
 //            else
 //                R1=0
-// USAGE: R0 has a preset value inside it
+// USAGE: R0 has a preset value inside it.
 
 @0
 D=M   

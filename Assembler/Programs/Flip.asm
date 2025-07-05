@@ -1,6 +1,6 @@
 // Program: Flip.asm
 // flips the values of
-// RAM[0] and RAM[1]
+// RAM[0] and RAM[1].
 
 @1
 D=M  // store value

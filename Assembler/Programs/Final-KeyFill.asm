@@ -5,7 +5,7 @@
 // memory address for screen starts at RAM[16384] ends at RAM[24575], 8191 iterations
 // memory address for key is at RAM[24576]
 
-// the binary file has been done without making the comments "0000000000000000"
+// the binary file has been done without making the comments "0000000000000000".
 
 // pseudo code
 // OGLOOP1

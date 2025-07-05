@@ -6,21 +6,21 @@
 @1 // YO
   D = M +  1   
  
-
 @0
-0;JMP // erm what the sigma
+0;JMP // yogurt
 D=M+1 // D=1;JMP
-D=D+1 // gurt YO
+D=D+1 // gurt: yo
 // HELLO WORLD
 A=M+1
 A=A+1;JMP
 M+1
 1
+-1
 
 // 20
 // This is a comment
-@1          // A-instruction
-D           // C-instruction comp
-D=M+1       // C-instruction dest=comp
-0;JMP       // C-instruction comp;jump
-M=D+A;JMP   // C-instruction dest=comp;jump
+@1          // A-instruction: @value
+D           // C-instruction: comp
+D=M+1       // C-instruction: dest=comp
+0;JMP       // C-instruction: comp;jump
+M=D+A;JMP   // C-instruction: dest=comp;jump

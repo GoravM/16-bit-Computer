@@ -1,6 +1,6 @@
 // draws a filled rectangle at the screen's top left corner
 // the rectangle's width is 16 pixels, and its height is RAM[0]
-// input value at RAM[0]=n such that n >= 0
+// input value at RAM[0]=n such that n >= 0.
 
 // pseudo code 
 // addr = SCREEN

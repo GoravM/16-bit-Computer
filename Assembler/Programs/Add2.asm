@@ -1,6 +1,6 @@
 // Program: Add2.asm
 // RAM[2] = RAM[0] + RAM[1]
-// USAGE: RAM[0] and RAM[1] have preset values
+// USAGE: RAM[0] and RAM[1] have preset values.
 
 @0      // RAM[0]
 D=M     // D=RAM[0]

@@ -129,7 +129,7 @@ void BintoGlobal(char Binary[17]){
     jump_bits[3] = '\0';
 }
 
-// remove spaces
+// remove spaces, '\n' and '\t'
 void removeSpaces(char *str) {
     int i = 0, j = 0;
     while (str[i]) {

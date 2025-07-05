@@ -1,6 +1,6 @@
 // ASSIGNMENT 1
 // Mult 
-// RAM[2] = RAM[1] * RAM[0]
+// RAM[2] = RAM[1] * RAM[0].
 
 @16
 M=0	// init i = 0

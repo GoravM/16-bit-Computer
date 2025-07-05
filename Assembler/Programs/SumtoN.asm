@@ -1,6 +1,6 @@
 // compute 1+2+...+n
 // RAM[1] = 1+2+...+RAM[0]
-// USAGE: Ram[0] already has value
+// USAGE: Ram[0] already has value.
 
 @0	// D = n = RAM[0]
 D=M
