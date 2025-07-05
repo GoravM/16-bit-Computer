@@ -2,12 +2,12 @@
 Made a 16 bit Computer in HDL, that can execute assembly code.
 
 
-### Elementary Logic Gates
+## Elementary Logic Gates
 ---
 This Section lays the foundations of the project by implementing basic logic gates such as AND, OR, NOT using NAND gates. These gates are used to implement Xor, And16, Not16, Or16, Or8Way, DMux and Mux, Which are further used to implement Mux16, Mux4Way16, Mux8Way16, DMux4Way and Dmux8Way and etc these are very crucial fundamental Chips which will be used frequently in later sections. 
 
 
-### Arithmetic Logic Unit
+## Arithmetic Logic Unit
 ---
 This section builds upon the Elementary Logic Gates section by first constructing the HalfAdder, FullAdder, and Add16 chips, which are essential for designing the Arithmetic Logic Unit (ALU). These components are then used to implement the complete ALU, which can perform a variety of arithmetic and logical operations, including addition, subtraction, and bitwise functions. The ALU is designed to work efficiently with control signals that determine the operation to be executed.
 
@@ -16,11 +16,11 @@ This section builds upon the Elementary Logic Gates section by first constructin
 <p align="center">Arithmetic Logic Unit Chip Circuit</p>
 
 
-### Memory System
+## Memory System
 ---
 This Section focuses on the implementation of storage components. It began with the creation of elementary storage units such as the Bit, Register, and RAM8 chips. These Chips are then scaled up to form RAM64, RAM512, RAM4K and finally RAM16K. The implementation of the Program Counter (PC) allows sequential execution of instructions by keeping track of the next address to be fetched. These memory components play a crucial role in ensuring smooth execution and data storage within the system.
 
-### 16-bit-Computer
+## 16-bit-Computer
 ---
 This section integrates all previously implemented components—logic gates, ALU, and memory system—into a fully functional 16-bit computer capable of executing assembly instructions. The computer consists of a Central Processing Unit (CPU), Memory (RAM), and ROM (Read-Only Memory), which together form a system capable of handling basic computation, control flow, and data storage. The CPU interacts with memory and executes instructions stored in ROM, while the ALU performs arithmetic and logical operations. Additionally, the system includes allocated memory registers for display output (8K registers) and a dedicated register (1 register) for keyboard inputs, enabling basic input and output functionality.
 
@@ -55,7 +55,7 @@ The A-Instruction is the second type of instruction in the Hack assembly languag
 
 Where value is a 15-bit constant or a label referring to a memory address. The opcode is always 0, distinguishing it from a C-Instruction.
 
-### Assembler
+## Assembler
 ---
 The Assembler component translates Hack assembly language into binary machine code compatible with the 16-bit computer architecture. It processes files containing both A-instructions (e.g., `@value`) and C-instructions (e.g., `dest=comp;jump`) and outputs a binary file with corresponding 16-bit machine instructions.
 
