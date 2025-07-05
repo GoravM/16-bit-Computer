@@ -79,7 +79,7 @@ D           // C-instruction: comp
 D=M+1       // C-instruction: dest=comp
 0;JMP       // C-instruction: comp;jump
 M=D+A;JMP   // C-instruction: dest=comp;jump
-```
+``` 
 
 Produces:
 
