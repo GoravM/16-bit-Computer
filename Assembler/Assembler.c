@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 // all comp syntax and binaries
 const char *comp1[] = {
@@ -67,7 +68,7 @@ const char *jump2[] = {
     "111"  // JMP
 };
 
-// Global Binary
+// Global Binaries
 char opcode_bit[2];
 char ignore[3] = "00"; // unused bits ignore
 char comp_bits[8];
@@ -80,6 +81,59 @@ int line_count = 0;
 // Final Binary for output
 char Final_Binary[17] = "";
 
+// Struct for Labels
+#define MAX_SYMBOLS 500
+
+typedef struct  {
+    char name[100];
+    int address;
+} Symbol;
+
+Symbol symbol_table[MAX_SYMBOLS];
+int symbol_count = 0;
+
+// add Symbol Method
+void add_symbol(const char *name, int address) {
+    // Check if the symbol already exists to avoid duplicates
+    for (int i = 0; i < symbol_count; i++) {
+        if (strcmp(symbol_table[i].name, name) == 0) {
+            return; // already exists, do nothing
+        }
+    }
+
+    // Add new symbol to table
+    strcpy(symbol_table[symbol_count].name, name);
+    symbol_table[symbol_count].address = address;
+    symbol_count++;
+}
+
+// get address of symbol 
+// @symbol -> @address
+int get_address(const char *name) {
+    for (int i = 0; i < symbol_count; i++) {
+        if (strcmp(symbol_table[i].name, name) == 0) {
+            return symbol_table[i].address;
+        }
+    }
+    return -1; // Not found
+}
+
+// Load Predefined Symbols
+void load_predefined_symbols() {
+    char r[4];
+    for (int i = 0; i <= 15; i++) {
+        sprintf(r, "R%d", i);
+        add_symbol(r, i);
+    }
+    add_symbol("SP", 0);
+    add_symbol("LCL", 1);
+    add_symbol("ARG", 2);
+    add_symbol("THIS", 3);
+    add_symbol("THAT", 4);
+    add_symbol("SCREEN", 16384);
+    add_symbol("KBD", 24576);
+}
+
 // set everything to 0
 void reset_bits(){
     strcpy(Final_Binary, "");
@@ -91,8 +145,31 @@ void reset_bits(){
 }
 
 // method for testing
+void print_symbol_table() {
+    printf("\n--- SYMBOL TABLE ---\n");
+    for (int i = 0; i < symbol_count; i++) {
+        printf("%s -> %d\n", symbol_table[i].name, symbol_table[i].address);
+    }
+    printf("--------------------\n");
+}
+
+// method for testing
 void printGlobals() {
     printf("Opcode: %s, Ignore: %s, Comp: %s, Dest: %s, Jump: %s\n", opcode_bit, ignore, comp_bits, dest_bits,jump_bits);
+}
+
+// method for checking if string is a number
+int is_number(const char *str){
+    if (str[0] == '\0'){
+        return 0;
+    }
+
+    for (int i = 0; str[i] != '\0'; i++){
+        if (!isdigit(str[i])){
+            return 0;
+        }
+    }
+    return 1;
 }
 
 // For A-Instruction: @value -> 101001 (translator)
@@ -141,15 +218,16 @@ void removeSpaces(char *str) {
     str[j] = '\0';
 }
 
-
-// checks if str contains '=' or ';'
-int has_equal_or_semi(char *str){
-    for (int i = 0; str[i] != '\0'; i++){
-        if (str[i] == '=' || str[i] == ';'){
-            return 1;
+// removes brackets
+void removeBrackets(char *str) {
+    int i = 0, j = 0;
+    while (str[i]) {
+        if (str[i] != '(' && str[i] != ')') {
+            str[j++] = str[i];
         }
+        i++;
     }
-    return 0;
+    str[j] = '\0';
 }
 
 // method for testing
@@ -209,6 +287,7 @@ void jumptobin(char jump_str[10]) {
     }
 }
 
+// Builds 16-bit output for line
 void buildFinalBinary() {
     // Reset
     strcpy(Final_Binary, "");
@@ -219,6 +298,8 @@ void buildFinalBinary() {
     strcat(Final_Binary, dest_bits);
     strcat(Final_Binary, jump_bits);
 }
+
+
 
 int main(int argc, char *argv[]){
 
@@ -247,13 +328,67 @@ int main(int argc, char *argv[]){
         exit(1);
     }
 
+    // First Pass: Label Checks and Storing ------------------------------------------------------------
+    // Scans the file to identify and store label declarations with their respective ROM addresses.
+    load_predefined_symbols();
 
-    // empty Global Binaries
+    int rom_address = 0;
+    rewind(fp);  // Just to be safe
+
+    while (fgets(line, sizeof(line), fp)) {
+
+        //increment instruction (ROM) address
+        rom_address++;
+
+        // remove comments
+        char *comment = strstr(line, "//");
+        if (comment) *comment = '\0';
+
+        removeSpaces(line);
+
+        //printf("line %d: %s\n",rom_address, line);
+
+        // OPTIONAL but have to add the same line in second pass if using this
+        // skip empty lines
+        // if (line[0] == '\0') continue;
+
+        // label check
+        if (line[0] == '(') {
+            int len = strlen(line);
+            if (line[len - 1] != ')'){
+                printf("Flag Syntax issue on line: %d\n", rom_address);
+                exit(1);
+            }
+            
+
+            char label[100];
+            //printf("LABEL DETECTED\n");
+            // remove brackets
+            removeBrackets(line);
+            strcpy(label, line);
+
+            //printf("Label: %s, stored at line: %d\n", label, rom_address);
+            add_symbol(label, rom_address);  // store label with current ROM address
+            continue;
+        }
+
+        
+    }
+
+
+    // Second Pass: Instruction Translation -----------------------------------------------------------
+    // Translates A- and C-instructions into binary, resolves symbols, and allocates variable addresses
+
+    // Empty Global Binaries
     reset_bits();
+
+    // Go Through File Again
+    rewind(fp);
  
-    // go through file line by line
+    // go through file
     while (fgets(line, sizeof(line), fp)){
 
+        // line counter
         line_count++;
 
         // if "//" appears then replace it with '\0'
@@ -265,6 +400,7 @@ int main(int argc, char *argv[]){
         // remove spaces
         removeSpaces(line);
 
+        // OPTIONAL
         // empty lines and comment lines get treated as "@0" line that does nothing
         if (line[0] == '\0'){
             //printf("skipped line: %d\n", line_count);
@@ -277,6 +413,13 @@ int main(int argc, char *argv[]){
             fprintf(out, "%s\n", Final_Binary);
 
             //printf("\n");
+            continue;
+        }
+
+        // if flag then ignore it and treat it as @0
+        if (line[0] == '('){
+            strcpy(Final_Binary, "0000000000000000");
+            fprintf(out, "%s\n", Final_Binary);
             continue;
         }
 
@@ -315,25 +458,39 @@ int main(int argc, char *argv[]){
         // A-Instruction
         else if (line[0] == '@'){
             strcpy(opcode_bit, "0");
-            // make it into binary
-            int num;
+            char symbol[100];
+            strcpy(symbol, line + 1); // @symbol -> symbol
+
+            // its either address or number
+            int address;
+
+            // if symbol are numbers
+            if (is_number(symbol)){
+                address = atoi(symbol);
+            } 
+            // else its a symbol
+            else {
+                // check iff there is an address
+                address = get_address(symbol);
+
+                // if not in symbol table
+                // make it into a variable
+                if (address == -1){
+                    static int ram_address = 16;
+                    address = ram_address;
+                    add_symbol(symbol, ram_address++); // also post-increment so value is up next time
+                }
+            }
+
+
             char Abin[17];
-            num = atoi(line + 1);
-            toBinary16(num, Abin);
+            toBinary16(address, Abin);
 
             // change global binary into Abin
             BintoGlobal(Abin);
         }
 
-        // C-Instruction set opcode == 1
-        // use substrings to help seperate between equal_indx && semi_indx
-        // ex: MD=D+1;JMP
-        // equal 2, semi 6
-        // between 0->equal_indx-1 is comp_str 
-        // between equal_indx+1->semi_indx-1 is dest_str
-        // between semi_indx+1->end is jump_str
-
-        // then use them with hasmap for bin code and then 
+        // C-Instruction set opcode = 1
         else {
 
             //printf("in C-instr line: %s\n", line);
@@ -421,6 +578,8 @@ int main(int argc, char *argv[]){
         reset_bits();
         //printf("\n");
     }
+    
+    //print_symbol_table();
     
     // close files and exit program
     fclose(fp);
