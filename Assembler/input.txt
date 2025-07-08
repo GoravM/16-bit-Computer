@@ -1,11 +1,13 @@
 // this file checks multiple different types of inputs
 // just a test input
 0
-@1
+@i  // in output.txt, line 4 and line 28 is the same proving
+    // that it stores and remembers variables
 // HELLO
 @1 // YO
   D = M +  1   
- 
+(HELLO)
+(HELLO)
 @0
 0;JMP // yogurt
 D=M+1 // D=1;JMP
@@ -16,11 +18,16 @@ A=A+1;JMP
 M+1
 1
 -1
+@HELLO
 
-// 20
 // This is a comment
 @1          // A-instruction: @value
 D           // C-instruction: comp
 D=M+1       // C-instruction: dest=comp
 0;JMP       // C-instruction: comp;jump
-M=D+A;JMP   // C-instruction: dest=comp;jump
+M=D+A;JLT   // C-instruction: dest=comp;jump
+@FLAG       // Flag Reference Before Flag
+(FLAG)      // Flag Label
+(FLAG2)     // Flag Label
+@FLAG2      // Flag Reference After Flag
+@i          // Variable Definer
