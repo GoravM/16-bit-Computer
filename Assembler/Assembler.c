@@ -206,17 +206,23 @@ void BintoGlobal(char Binary[17]){
     jump_bits[3] = '\0';
 }
 
-// remove spaces, '\n' and '\t'
+// characters that are annoying
+int isIgnorable(char c) {
+    return c == ' ' || c == '\n' || c == '\t' || c == '\r' || c == '\v' || c == '\f' || c == '\a';
+}
+
+// remove spaces and invisible characters
 void removeSpaces(char *str) {
     int i = 0, j = 0;
     while (str[i]) {
-        if (str[i] != ' ' && str[i] != '\n' && str[i] != '\t') {
+        if (!isIgnorable(str[i])) {
             str[j++] = str[i];
         }
         i++;
     }
     str[j] = '\0';
 }
+
 
 // removes brackets
 void removeBrackets(char *str) {
