@@ -302,7 +302,6 @@ void buildFinalBinary() {
 
 
 int main(int argc, char *argv[]){
-
     // check if file is given
     if (argc != 2){
         printf("Usage: %s <filename>\n", argv[0]);
