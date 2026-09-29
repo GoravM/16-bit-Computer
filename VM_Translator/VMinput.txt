@@ -1,0 +1,35 @@
+// This is a comment line
+push constant 7
+push constant 8
+add
+
+// testing arithmetic
+sub
+neg
+eq
+gt
+lt
+and
+or
+not
+
+// test memory segments
+push local 2
+pop argument 1
+push this 3
+pop that 0
+
+// test branching
+label LOOP_START
+goto LOOP_START
+if-goto END
+
+// test function calling
+function SimpleFunction 2
+call SimpleFunction 2
+return
+
+// malformed inputs
+push constant      // missing index
+pop               // missing segment and index
+add extra_arg     // extra arg on arithmetic

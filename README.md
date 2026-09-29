@@ -113,3 +113,6 @@ This implementation parses each line by:
 ```
 
 This design choice (inserting 0s for comment lines or flag declaration) ensures the program length remains consistent, aiding in debugging and step-by-step hardware simulation. While the assembler can function without inserting these 0s, omitting them can make debugging more difficult, especially due to the address-dependent nature of A-instructions and the challenge of tracing instruction flow when line positions no longer aligns.
+
+## VM Translator
+In Progress

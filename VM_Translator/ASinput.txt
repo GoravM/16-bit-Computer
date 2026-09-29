@@ -1,0 +1,177 @@
+// line 2: push constant 7
+@7
+D=A
+@SP
+A=M
+M=D
+@SP
+M=M+1
+
+// line 3: push constant 8
+@8
+D=A
+@SP
+A=M
+M=D
+@SP
+M=M+1
+
+// line 4: add
+@SP
+AM=M-1
+D=M
+A=A-1
+M=D+M
+
+// line 7: sub
+@SP
+AM=M-1
+D=M
+A=A-1
+M=M-D
+
+// line 8: neg
+@SP
+A=M-1
+M=-M
+
+// line 9: eq
+@SP
+AM=M-1
+D=M
+A=A-1
+D=M-D
+@TRUE_0
+D;JEQ
+@SP
+A=M-1
+M=0
+@END_0
+0;JMP
+(TRUE_0)
+@SP
+A=M-1
+M=-1
+(END_0)
+
+// line 10: gt
+@SP
+AM=M-1
+D=M
+A=A-1
+D=M-D
+@TRUE_1
+D;JGT
+@SP
+A=M-1
+M=0
+@END_1
+0;JMP
+(TRUE_1)
+@SP
+A=M-1
+M=-1
+(END_1)
+
+// line 11: lt
+@SP
+AM=M-1
+D=M
+A=A-1
+D=M-D
+@TRUE_2
+D;JLT
+@SP
+A=M-1
+M=0
+@END_2
+0;JMP
+(TRUE_2)
+@SP
+A=M-1
+M=-1
+(END_2)
+
+// line 12: and
+@SP
+AM=M-1
+D=M
+A=A-1
+M=D&M
+
+// line 13: or
+@SP
+AM=M-1
+D=M
+A=A-1
+M=D|M
+
+// line 14: not
+@SP
+A=M-1
+M=!M
+
+// line 17: push local 2
+@2
+D=A
+@LCL
+A=D+M
+D=M
+@SP
+A=M
+M=D
+@SP
+M=M+1
+
+// line 18: pop argument 1
+@1
+D=A
+@ARG
+D=D+M
+@R13
+M=D
+@SP
+AM=M-1
+D=M
+@R13
+A=M
+M=D
+
+// line 19: push this 3
+@3
+D=A
+@THIS
+A=D+M
+D=M
+@SP
+A=M
+M=D
+@SP
+M=M+1
+
+// line 20: pop that 0
+@0
+D=A
+@THAT
+D=D+M
+@R13
+M=D
+@SP
+AM=M-1
+D=M
+@R13
+A=M
+M=D
+
+// line 23: label LOOP_START
+
+// line 24: goto LOOP_START
+
+// line 25: if-goto END
+
+// line 28: function SimpleFunction 2
+
+// line 29: call SimpleFunction 2
+
+// line 30: return
+

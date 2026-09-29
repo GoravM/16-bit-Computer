@@ -120,16 +120,17 @@ int get_address(const char *name) {
 
 // Load Predefined Symbols
 void load_predefined_symbols() {
-    char r[4];
-    for (int i = 0; i <= 15; i++) {
-        sprintf(r, "R%d", i);
-        add_symbol(r, i);
-    }
     add_symbol("SP", 0);
     add_symbol("LCL", 1);
     add_symbol("ARG", 2);
     add_symbol("THIS", 3);
     add_symbol("THAT", 4);
+    // R5-R12 are temp registers for the VM
+    char r[4];
+    for (int i = 13; i <= 15; i++) {
+        sprintf(r, "R%d", i);
+        add_symbol(r, i);
+    }
     add_symbol("SCREEN", 16384);
     add_symbol("KBD", 24576);
 }

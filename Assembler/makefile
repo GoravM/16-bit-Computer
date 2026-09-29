@@ -1,15 +1,17 @@
 # default compile
-warnings_BAD: *.c
+warnings_BAD: Assembler.c
 	gcc -Werror -Wall -g -std=gnu99 -o read Assembler.c -lrt
 	
 # compile without caring about errors
-warnings_OK: *.c
+warnings_OK: Assembler.c
 	gcc -Wall -g -std=gnu99 -o read Assembler.c -lrt
 
 # defaults runs executable with input.txt
 run:
+	gcc -Werror -Wall -g -std=gnu99 -o read Assembler.c -lrt
 	./read input.txt
-
+	rm read
+	
 # clean
 clean:
 	rm read 
